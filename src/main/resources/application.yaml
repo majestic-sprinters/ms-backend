@@ -6,9 +6,9 @@ server:
 spring:
   data:
     mongodb:
-      database: ${POSTGRES_DB:ms-db}
-      host: ${POSTGRES_HOST:localhost}
-      port: ${POSTGRES_PORT:27017}
+      database: ${MONGO_DB:ms-db}
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27017}
   jpa:
     hibernate:
       ddl-auto: update
