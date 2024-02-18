@@ -15,7 +15,6 @@ public interface UserMapper {
 
   List<UserDTO> userToDtos(List<User> users);
 
-  @Mapping(target = "password", ignore = true)
   @Mapping(target = "id", ignore = true)
   User userDtoToModel(UserDTO userDto);
 
