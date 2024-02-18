@@ -36,7 +36,3 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
