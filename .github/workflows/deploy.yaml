@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   publish:
-    name: Publish image to Docker Hub
+    name: Build and publish to registry
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,8 @@ jobs:
 
   deploy:
     name: Deploy to target machine
-    runs-on: [master-0]
+    needs: publish
+    runs-on: [self-hosted, master-0]
 
     steps:
       - name: Pull newer images from registry
