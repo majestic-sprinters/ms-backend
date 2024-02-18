@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends MongoRepository<User, ObjectId> {
   Optional<User> findByFio(@Param("fio") String ctn);
   Optional<User> findByUsername(@Param("username") String ctn);
+  
 }
