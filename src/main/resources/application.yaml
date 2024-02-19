@@ -1,6 +1,4 @@
 server:
-  servlet:
-    context-path: /api/v1/
   port: ${MS_BACKEND_PORT:8080}
 
 spring:
