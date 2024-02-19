@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDTO createOrUpdateUser(UserDTO userDto) {
-    var byCtn = userRepository.findByFio(userDto.getFio());
+    var byCtn = userRepository.findByUsername(userDto.getUsername());
     var user = byCtn.orElseGet(User::new);
     userMapper.updateOnly(userDto, user);
     return saveAndMapToDto(user);
