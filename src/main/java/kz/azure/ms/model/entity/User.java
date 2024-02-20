@@ -1,12 +1,11 @@
 package kz.azure.ms.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity
 @Document(collection = "users")
 public class User {
 
