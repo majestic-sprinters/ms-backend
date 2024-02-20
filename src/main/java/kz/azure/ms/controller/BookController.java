@@ -11,12 +11,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 @RequestMapping(value = "book")
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
+
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
+
+    @PostMapping("/createOrUpdate")
+    public BookDTO createOrUpdateBook(@RequestBody BookDTO bookDTO) {
+        logger.info("Received request to create or update book: {}", bookDTO);
+        return bookService.createOrUpdateBook(bookDTO);
+    }
+
 
     @PostMapping("/createOrUpdate")
     public BookDTO createOrUpdateBook(@RequestBody BookDTO bookDTO) {

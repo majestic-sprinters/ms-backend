@@ -11,12 +11,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 @RequestMapping(value = "user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @PostMapping("/createOrUpdate")
+    public UserDTO createOrUpdateUser(@RequestBody UserDTO userDto) {
+        logger.info("Received request to create or update user: {}", userDto);
+        return userService.createOrUpdateUser(userDto);
+    }
+
 
     @PostMapping("/createOrUpdate")
     public UserDTO createOrUpdateUser(@RequestBody UserDTO userDto) {
