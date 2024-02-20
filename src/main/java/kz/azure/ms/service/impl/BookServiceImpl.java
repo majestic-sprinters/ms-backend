@@ -1,14 +1,15 @@
 package kz.azure.ms.service.impl;
 
-import java.util.List;
 import kz.azure.ms.exceptions.ObjectNotFoundException;
 import kz.azure.ms.mapper.BookMapper;
 import kz.azure.ms.model.dto.BookDTO;
 import kz.azure.ms.model.entity.Book;
-import kz.azure.ms.reporitory.BookRepository;
+import kz.azure.ms.repository.BookRepository;
 import kz.azure.ms.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -17,38 +18,34 @@ public class BookServiceImpl implements BookService {
   private final BookMapper bookMapper;
 
   @Override
-  public BookDTO createOrUpdateBook(BookDTO bookDTO) {
-    var byName = bookRepository.findByName(bookDTO.getName());
-    var book = byName.orElseGet(Book::new);
-    bookMapper.updateOnly(bookDTO, book);
-    return saveAndMapToDto(book);
+  public Mono<BookDTO> createOrUpdateBook(BookDTO bookDTO) {
+    return bookRepository.findByName(bookDTO.getName())
+            .switchIfEmpty(Mono.defer(() -> Mono.just(new Book())))
+            .flatMap(book -> {
+              bookMapper.updateOnly(bookDTO, book);
+              return saveAndMapToDto(book);
+            });
   }
 
-  public BookDTO saveAndMapToDto(Book book) {
-    return bookMapper.bookToDto(bookRepository.save(book));
-  }
-
-  @Override
-  public List<BookDTO> getBooks() {
-    return bookMapper.bookToDtos(bookRepository.findAll());
+  public Mono<BookDTO> saveAndMapToDto(Book book) {
+    return bookRepository.save(book).map(bookMapper::bookToDto);
   }
 
   @Override
-  public BookDTO getBookByName(String name) {
-    return bookMapper.bookToDto(bookRepository.findByName(name)
-        .orElseThrow(() -> new ObjectNotFoundException(
-            String.format("Book %s is not found", name))));
+  public Flux<BookDTO> getBooks() {
+    return bookRepository.findAll().map(bookMapper::bookToDto);
   }
 
   @Override
-  public void deleteBookByName(String name) {
-    var book =
-        bookRepository.findByName(name)
-            .orElseThrow(
-                () -> new ObjectNotFoundException(
-                    String.format("Book %s is not found", name)));
+  public Mono<BookDTO> getBookByName(String name) {
+    return bookRepository.findByName(name)
+            .map(bookMapper::bookToDto)
+            .switchIfEmpty(Mono.error(new ObjectNotFoundException(
+                    String.format("Book %s is not found", name))));
+  }
 
-    bookRepository.delete(book);
-
+  @Override
+  public Mono<Void> deleteBookByName(String name) {
+    return bookRepository.deleteByName(name);
   }
 }

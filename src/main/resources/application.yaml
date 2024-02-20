@@ -1,9 +1,11 @@
 server:
-  servlet:
-    context-path: /api/v1/
   port: ${MS_BACKEND_PORT:8080}
 
 spring:
+  webflux:
+    base-path: /api/v1/
+  main:
+    web-application-type: reactive
   data:
     mongodb:
       database: ${MONGO_DB:ms-db}
