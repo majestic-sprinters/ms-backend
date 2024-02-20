@@ -1,14 +1,12 @@
 package kz.azure.ms.service;
 
-import java.util.List;
 import kz.azure.ms.model.dto.BookDTO;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface BookService {
-  BookDTO createOrUpdateBook(BookDTO bookDTO);
-
-  List<BookDTO> getBooks();
-
-  BookDTO getBookByName(String name);
-
-  void deleteBookByName(String name);
+  Mono<BookDTO> createOrUpdateBook(BookDTO bookDTO);
+  Flux<BookDTO> getBooks();
+  Mono<BookDTO> getBookByName(String name);
+  Mono<Void> deleteBookByName(String name);
 }
