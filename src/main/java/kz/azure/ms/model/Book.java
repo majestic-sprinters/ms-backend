@@ -1,4 +1,4 @@
-package kz.azure.ms.model.entity;
+package kz.azure.ms.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

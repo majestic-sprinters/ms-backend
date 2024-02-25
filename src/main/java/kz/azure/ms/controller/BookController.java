@@ -1,6 +1,6 @@
 package kz.azure.ms.controller;
 
-import kz.azure.ms.model.dto.BookDTO;
+import kz.azure.ms.model.Book;
 import kz.azure.ms.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,17 +20,17 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping("/createOrUpdate")
-    public Mono<BookDTO> createOrUpdateBook(@RequestBody BookDTO bookDTOMono) {
+    public Mono<Book> createOrUpdateBook(@RequestBody Book bookDTOMono) {
         return bookService.createOrUpdateBook(bookDTOMono);
     }
 
     @GetMapping("/getBooks")
-    public Flux<BookDTO> getBooks() {
+    public Flux<Book> getBooks() {
         return bookService.getBooks();
     }
 
     @GetMapping("/getBookByName/{name}")
-    public Mono<BookDTO> getBookByName(@PathVariable String name) {
+    public Mono<Book> getBookByName(@PathVariable String name) {
         return bookService.getBookByName(name);
     }
 

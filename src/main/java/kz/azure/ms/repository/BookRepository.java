@@ -1,7 +1,7 @@
 package kz.azure.ms.repository;
 
 
-import kz.azure.ms.model.entity.Book;
+import kz.azure.ms.model.Book;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
