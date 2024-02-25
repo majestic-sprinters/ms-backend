@@ -1,9 +1,7 @@
 package kz.azure.ms.service.impl;
 
 import kz.azure.ms.exceptions.ObjectNotFoundException;
-import kz.azure.ms.mapper.BookMapper;
-import kz.azure.ms.model.dto.BookDTO;
-import kz.azure.ms.model.entity.Book;
+import kz.azure.ms.model.Book;
 import kz.azure.ms.repository.BookRepository;
 import kz.azure.ms.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -15,31 +13,30 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
   private final BookRepository bookRepository;
-  private final BookMapper bookMapper;
 
   @Override
-  public Mono<BookDTO> createOrUpdateBook(BookDTO bookDTO) {
+  public Mono<Book> createOrUpdateBook(Book bookDTO) {
     return bookRepository.findByName(bookDTO.getName())
             .switchIfEmpty(Mono.defer(() -> Mono.just(new Book())))
             .flatMap(book -> {
-              bookMapper.updateOnly(bookDTO, book);
-              return saveAndMapToDto(book);
+              book.setName(bookDTO.getName());
+              book.setAuthor(bookDTO.getAuthor());
+              book.setDescription(bookDTO.getDescription());
+              book.setPublisher(bookDTO.getPublisher());
+              book.setYear(bookDTO.getYear());
+
+              return bookRepository.save(book);
             });
   }
 
-  public Mono<BookDTO> saveAndMapToDto(Book book) {
-    return bookRepository.save(book).map(bookMapper::bookToDto);
+  @Override
+  public Flux<Book> getBooks() {
+    return bookRepository.findAll();
   }
 
   @Override
-  public Flux<BookDTO> getBooks() {
-    return bookRepository.findAll().map(bookMapper::bookToDto);
-  }
-
-  @Override
-  public Mono<BookDTO> getBookByName(String name) {
+  public Mono<Book> getBookByName(String name) {
     return bookRepository.findByName(name)
-            .map(bookMapper::bookToDto)
             .switchIfEmpty(Mono.error(new ObjectNotFoundException(
                     String.format("Book %s is not found", name))));
   }
